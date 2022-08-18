@@ -1,0 +1,5 @@
+ToDo: Testing
+ToDo: Documentation cleanup. Swagger?
+ToDo: Error and Exception handling
+
+ToDo: Refactor controllers to use records instead of table pojos
