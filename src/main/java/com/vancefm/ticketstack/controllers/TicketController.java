@@ -1,6 +1,6 @@
 package com.vancefm.ticketstack.controllers;
 
-import com.vancefm.ticketstack.models.tables.pojos.Ticket;
+import com.vancefm.ticketstack.pojos.Ticket;
 import com.vancefm.ticketstack.services.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

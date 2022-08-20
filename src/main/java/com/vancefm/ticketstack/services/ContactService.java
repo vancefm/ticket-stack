@@ -1,7 +1,6 @@
 package com.vancefm.ticketstack.services;
 
-import com.vancefm.ticketstack.models.tables.pojos.Contact;
-import com.vancefm.ticketstack.models.tables.pojos.Ticket;
+import com.vancefm.ticketstack.pojos.Contact;
 import com.vancefm.ticketstack.models.tables.records.ContactRecord;
 import org.jooq.DSLContext;
 import org.jooq.Record;
@@ -12,6 +11,7 @@ import org.modelmapper.jooq.RecordValueReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
 import static com.vancefm.ticketstack.models.tables.Contact.CONTACT;
@@ -53,12 +53,21 @@ public class ContactService implements BasicService<Contact>{
 
     @Override
     public void createOrUpdate(Contact contact) {
-        ContactRecord contactRecord = context.fetchOne(CONTACT, CONTACT.ID.eq(contact.getId()));
+        ContactRecord contactRecord = context.fetchOne(CONTACT, CONTACT.EMAIL_ADDRESS.eq(contact.getEmailAddress()));
         if (contactRecord == null) {
             contactRecord = context.newRecord(CONTACT);
+            modelMapper.map(contact, contactRecord);
         }
-        modelMapper.map(contact, contactRecord);
-        contactRecord.store();
+
+        try {
+            context.loadInto(CONTACT)
+                    .onDuplicateKeyUpdate()
+                    .loadRecords(contactRecord)
+                    .fieldsCorresponding()
+                    .execute();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

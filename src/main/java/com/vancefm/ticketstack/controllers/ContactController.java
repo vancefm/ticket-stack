@@ -1,13 +1,13 @@
 package com.vancefm.ticketstack.controllers;
 
-import com.vancefm.ticketstack.models.tables.pojos.Contact;
-import com.vancefm.ticketstack.models.tables.records.ContactRecord;
+import com.vancefm.ticketstack.pojos.Contact;
 import com.vancefm.ticketstack.services.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -46,7 +46,7 @@ public class ContactController implements BasicController<Contact>{
      */
     @PostMapping
     @Override
-    public ResponseEntity<String> create(@RequestBody Contact contact) {
+    public ResponseEntity<String> create(@Valid @RequestBody Contact contact) {
         contactService.createOrUpdate(contact);
         return new ResponseEntity<>("Done", HttpStatus.OK);
     }
