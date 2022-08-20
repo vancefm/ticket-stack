@@ -1,6 +1,6 @@
 package com.vancefm.ticketstack.services;
 
-import com.vancefm.ticketstack.models.tables.pojos.Ticket;
+import com.vancefm.ticketstack.pojos.Ticket;
 import com.vancefm.ticketstack.models.tables.records.TicketRecord;
 import org.jooq.DSLContext;
 import org.jooq.Record;
@@ -11,6 +11,7 @@ import org.modelmapper.jooq.RecordValueReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
 import static com.vancefm.ticketstack.models.tables.Ticket.TICKET;
@@ -57,9 +58,18 @@ public class TicketService implements BasicService<Ticket>{
         TicketRecord ticketRecord = context.fetchOne(TICKET, TICKET.ID.eq(ticket.getId()));
         if (ticketRecord == null) {
             ticketRecord = context.newRecord(TICKET);
+            modelMapper.map(ticket, ticketRecord);
         }
-        modelMapper.map(ticket, ticketRecord);
-        ticketRecord.store();
+
+        try{
+            context.loadInto(TICKET)
+                    .onDuplicateKeyUpdate()
+                    .loadRecords(ticketRecord)
+                    .fieldsCorresponding()
+                    .execute();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void delete(Integer id){

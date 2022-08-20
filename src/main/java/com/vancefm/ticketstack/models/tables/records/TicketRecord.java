@@ -8,6 +8,8 @@ import com.vancefm.ticketstack.models.tables.Ticket;
 
 import java.time.LocalDateTime;
 
+import javax.validation.constraints.Size;
+
 import org.jooq.Field;
 import org.jooq.Record1;
 import org.jooq.Record9;
@@ -49,6 +51,7 @@ public class TicketRecord extends UpdatableRecordImpl<TicketRecord> implements R
     /**
      * Getter for <code>ticketstack.ticket.subject</code>.
      */
+    @Size(max = 50)
     public String getSubject() {
         return (String) get(1);
     }
@@ -94,6 +97,7 @@ public class TicketRecord extends UpdatableRecordImpl<TicketRecord> implements R
     /**
      * Getter for <code>ticketstack.ticket.description</code>.
      */
+    @Size(max = 2000)
     public String getDescription() {
         return (String) get(4);
     }

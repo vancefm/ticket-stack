@@ -6,6 +6,9 @@ package com.vancefm.ticketstack.models.tables.records;
 
 import com.vancefm.ticketstack.models.tables.RequestCategory;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import org.jooq.Field;
 import org.jooq.Record1;
 import org.jooq.Record2;
@@ -47,6 +50,8 @@ public class RequestCategoryRecord extends UpdatableRecordImpl<RequestCategoryRe
     /**
      * Getter for <code>ticketstack.request_category.category</code>.
      */
+    @NotNull
+    @Size(max = 25)
     public String getCategory() {
         return (String) get(1);
     }
