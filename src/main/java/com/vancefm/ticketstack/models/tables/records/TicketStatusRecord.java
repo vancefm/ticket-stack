@@ -6,9 +6,6 @@ package com.vancefm.ticketstack.models.tables.records;
 
 import com.vancefm.ticketstack.models.tables.TicketStatus;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
 import org.jooq.Field;
 import org.jooq.Record1;
 import org.jooq.Record2;
@@ -50,8 +47,6 @@ public class TicketStatusRecord extends UpdatableRecordImpl<TicketStatusRecord> 
     /**
      * Getter for <code>ticketstack.ticket_status.status_name</code>.
      */
-    @NotNull
-    @Size(max = 25)
     public String getStatusName() {
         return (String) get(1);
     }

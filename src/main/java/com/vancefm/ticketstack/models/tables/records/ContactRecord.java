@@ -6,9 +6,6 @@ package com.vancefm.ticketstack.models.tables.records;
 
 import com.vancefm.ticketstack.models.tables.Contact;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
 import org.jooq.Field;
 import org.jooq.Record1;
 import org.jooq.Record4;
@@ -50,8 +47,6 @@ public class ContactRecord extends UpdatableRecordImpl<ContactRecord> implements
     /**
      * Getter for <code>ticketstack.contact.email_address</code>.
      */
-    @NotNull
-    @Size(max = 320)
     public String getEmailAddress() {
         return (String) get(1);
     }
@@ -67,7 +62,6 @@ public class ContactRecord extends UpdatableRecordImpl<ContactRecord> implements
     /**
      * Getter for <code>ticketstack.contact.first_name</code>.
      */
-    @Size(max = 100)
     public String getFirstName() {
         return (String) get(2);
     }
@@ -83,7 +77,6 @@ public class ContactRecord extends UpdatableRecordImpl<ContactRecord> implements
     /**
      * Getter for <code>ticketstack.contact.last_name</code>.
      */
-    @Size(max = 100)
     public String getLastName() {
         return (String) get(3);
     }
