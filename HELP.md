@@ -1,7 +1,7 @@
 # Read Me First
->Generate Jooq POJOS by running 'mvn clean install' from console. This will generate the models located in com.vancefm.ticketstack.models.
 
-# Docker Build and Run:
->docker build . -t ticket-stack
+When refactoring pojos, it may be benficial to generate templates from JOOQ.
+Do this by running ***mvn clean install*** from console. This will generate the models located in com.vancefm.ticketstack.models.
 
->docker run -it -p 8080:8080 ticket-stack
+# Docker:
+This app uses docker compose. For the first run, use the command ***docker compose up***

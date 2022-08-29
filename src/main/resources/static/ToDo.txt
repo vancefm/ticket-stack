@@ -1,3 +1,4 @@
 ToDo: Testing
 ToDo: Documentation cleanup. Swagger?
 ToDo: Error and Exception handling (like database violations)
+ToDo: Kubernetes
