@@ -5,6 +5,7 @@ import java.util.List;
 public interface BasicService<T> {
     List<T> getAll();
     T getByID(Integer id);
-    void createOrUpdate(T t);
+    T create(T t);
+    T update(T t);
     void delete(Integer id);
 }
