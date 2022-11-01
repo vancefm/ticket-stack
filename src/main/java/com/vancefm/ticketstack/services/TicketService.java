@@ -54,7 +54,22 @@ public class TicketService implements BasicService<Ticket>{
 
 
 
-    public void createOrUpdate(Ticket ticket){
+    public Ticket create(Ticket ticket){
+        return jooqStore(ticket);
+    }
+
+    public Ticket update(Ticket ticket){
+        return jooqStore(ticket);
+    }
+
+    public void delete(Integer id){
+        TicketRecord ticketRecord = context.fetchOne(TICKET, TICKET.ID.eq(id));
+        if (ticketRecord != null) {
+            ticketRecord.delete();
+        }
+    }
+
+    private Ticket jooqStore(Ticket ticket){
         TicketRecord ticketRecord = context.fetchOne(TICKET, TICKET.ID.eq(ticket.getId()));
         if (ticketRecord == null) {
             ticketRecord = context.newRecord(TICKET);
@@ -67,15 +82,9 @@ public class TicketService implements BasicService<Ticket>{
                     .loadRecords(ticketRecord)
                     .fieldsCorresponding()
                     .execute();
+            return ticket;
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    public void delete(Integer id){
-        TicketRecord ticketRecord = context.fetchOne(TICKET, TICKET.ID.eq(id));
-        if (ticketRecord != null) {
-            ticketRecord.delete();
         }
     }
 }

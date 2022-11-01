@@ -23,6 +23,7 @@ public class TicketController implements BasicController<Ticket>{
      */
     @Override
     @GetMapping
+    @ResponseBody
     public ResponseEntity<List<Ticket>> getAll(){
         return new ResponseEntity<>(ticketService.getAll(), HttpStatus.OK);
     }
@@ -35,6 +36,7 @@ public class TicketController implements BasicController<Ticket>{
      */
     @Override
     @GetMapping("/{id}")
+    @ResponseBody
     public ResponseEntity<Ticket> getByID(@PathVariable("id") Integer id) {
         return new ResponseEntity<>(ticketService.getByID(id), HttpStatus.OK);
     }
@@ -47,9 +49,10 @@ public class TicketController implements BasicController<Ticket>{
      */
     @Override
     @PostMapping
-    public ResponseEntity<String> create(@RequestBody Ticket ticket){
-        ticketService.createOrUpdate(ticket);
-        return new ResponseEntity<>("Done", HttpStatus.OK);
+    @ResponseBody
+    public ResponseEntity<Ticket> create(@RequestBody Ticket ticket){
+        Ticket resultTicket = ticketService.create(ticket);
+        return new ResponseEntity<>(resultTicket, HttpStatus.OK);
     }
 
     /**
@@ -60,9 +63,10 @@ public class TicketController implements BasicController<Ticket>{
      */
     @Override
     @PutMapping
-    public ResponseEntity<String> update(@RequestBody Ticket ticket){
-        ticketService.createOrUpdate(ticket);
-        return new ResponseEntity<>("Done", HttpStatus.OK);
+    @ResponseBody
+    public ResponseEntity<Ticket> update(@RequestBody Ticket ticket){
+        Ticket resultTicket = ticketService.update(ticket);
+        return new ResponseEntity<>(resultTicket, HttpStatus.OK);
     }
 
     /**
@@ -73,6 +77,7 @@ public class TicketController implements BasicController<Ticket>{
      */
     @Override
     @DeleteMapping("/{id}")
+    @ResponseBody
     public ResponseEntity<String> delete(@PathVariable("id") Integer id){
         ticketService.delete(id);
         return new ResponseEntity<>("Ticket Deleted", HttpStatus.OK);

@@ -1,12 +1,16 @@
 package com.vancefm.ticketstack.pojos;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Ticket {
 
     private Integer       id;
