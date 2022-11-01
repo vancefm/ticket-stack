@@ -7,7 +7,7 @@ import java.util.List;
 public interface BasicController<T> {
     ResponseEntity<List<T>> getAll();
     ResponseEntity<T> getByID(Integer id);
-    ResponseEntity<String> create(T t);
-    ResponseEntity<String> update(T t);
+    ResponseEntity<T> create(T t);
+    ResponseEntity<T> update(T t);
     ResponseEntity<String> delete(Integer id);
 }
