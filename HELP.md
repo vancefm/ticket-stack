@@ -1,6 +1,6 @@
 # Read Me First
 
-When refactoring pojos, it may be benficial to generate templates from JOOQ.
+When refactoring pojos, it may be beneficial to generate templates from JOOQ.
 Do this by running ***mvn clean install*** from console. This will generate the models located in com.vancefm.ticketstack.models.
 
 # Docker:

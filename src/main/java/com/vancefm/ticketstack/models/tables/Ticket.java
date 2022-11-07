@@ -57,7 +57,7 @@ public class Ticket extends TableImpl<TicketRecord> {
     /**
      * The column <code>ticketstack.ticket.subject</code>.
      */
-    public final TableField<TicketRecord, String> SUBJECT = createField(DSL.name("subject"), SQLDataType.VARCHAR(50).defaultValue(DSL.inline("NULL", SQLDataType.VARCHAR)), this, "");
+    public final TableField<TicketRecord, String> SUBJECT = createField(DSL.name("subject"), SQLDataType.VARCHAR(50).nullable(false), this, "");
 
     /**
      * The column <code>ticketstack.ticket.contact_id</code>.

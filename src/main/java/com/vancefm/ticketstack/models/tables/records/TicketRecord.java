@@ -8,6 +8,7 @@ import com.vancefm.ticketstack.models.tables.Ticket;
 
 import java.time.LocalDateTime;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.jooq.Field;
@@ -51,6 +52,7 @@ public class TicketRecord extends UpdatableRecordImpl<TicketRecord> implements R
     /**
      * Getter for <code>ticketstack.ticket.subject</code>.
      */
+    @NotNull
     @Size(max = 50)
     public String getSubject() {
         return (String) get(1);
