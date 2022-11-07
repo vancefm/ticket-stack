@@ -1,6 +1,6 @@
 version: "3.8"
 services:
-  ticket-stack-api:
-    build: "ticket-stack-api"
+  api:
+    build: .
     ports:
       - "8080:8080"
