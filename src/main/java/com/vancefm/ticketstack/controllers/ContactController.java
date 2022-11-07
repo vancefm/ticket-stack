@@ -46,9 +46,9 @@ public class ContactController implements BasicController<Contact>{
      */
     @PostMapping
     @Override
-    public ResponseEntity<String> create(@Valid @RequestBody Contact contact) {
-        contactService.createOrUpdate(contact);
-        return new ResponseEntity<>("Done", HttpStatus.OK);
+    public ResponseEntity<Contact> create(@Valid @RequestBody Contact contact) {
+        Contact resultContact = contactService.create(contact);
+        return new ResponseEntity<>(resultContact, HttpStatus.OK);
     }
 
     /**
@@ -58,9 +58,9 @@ public class ContactController implements BasicController<Contact>{
      */
     @PutMapping
     @Override
-    public ResponseEntity<String> update(@RequestBody Contact contact) {
-        contactService.createOrUpdate(contact);
-        return new ResponseEntity<>("Done", HttpStatus.OK);
+    public ResponseEntity<Contact> update(@RequestBody Contact contact) {
+        Contact resultContact = contactService.update(contact);
+        return new ResponseEntity<>(resultContact, HttpStatus.OK);
     }
 
     /**

@@ -52,7 +52,24 @@ public class ContactService implements BasicService<Contact>{
     }
 
     @Override
-    public void createOrUpdate(Contact contact) {
+    public Contact create(Contact contact) {
+        return jooqStore(contact);
+    }
+
+    @Override
+    public Contact update(Contact contact) {
+        return jooqStore(contact);
+    }
+
+    @Override
+    public void delete(Integer id) {
+        ContactRecord contactRecord = context.fetchOne(CONTACT, CONTACT.ID.eq(id));
+        if (contactRecord != null) {
+            contactRecord.delete();
+        }
+    }
+
+    private Contact jooqStore(Contact contact){
         ContactRecord contactRecord = context.fetchOne(CONTACT, CONTACT.EMAIL_ADDRESS.eq(contact.getEmailAddress()));
         if (contactRecord == null) {
             contactRecord = context.newRecord(CONTACT);
@@ -65,16 +82,9 @@ public class ContactService implements BasicService<Contact>{
                     .loadRecords(contactRecord)
                     .fieldsCorresponding()
                     .execute();
+            return contact;
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public void delete(Integer id) {
-        ContactRecord contactRecord = context.fetchOne(CONTACT, CONTACT.ID.eq(id));
-        if (contactRecord != null) {
-            contactRecord.delete();
         }
     }
 }
