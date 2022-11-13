@@ -12,7 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
+import java.util.TimeZone;
 
 import static com.vancefm.ticketstack.models.tables.Ticket.TICKET;
 
@@ -30,6 +34,9 @@ public class TicketService implements BasicService<Ticket>{
 
     public List<Ticket> getAll(){
 
+        //Note mysql timestamp datatype converts values to UTC for storing, and from UTC when retrieving
+        //So depending on the database server timezone, the time values may be different than expected.
+
         return context
                 .select()
                 .from(TICKET)
@@ -37,6 +44,8 @@ public class TicketService implements BasicService<Ticket>{
     }
 
     public Ticket getByID(Integer id){
+        //Note mysql timestamp datatype converts values to UTC for storing, and from UTC when retrieving
+        //So depending on the database server timezone, the time values may be different than expected.
         Result<Record> record = context
                 .select()
                 .from(TICKET)
@@ -55,11 +64,18 @@ public class TicketService implements BasicService<Ticket>{
 
 
     public Ticket create(Ticket ticket){
+
+        //See if a record exists
         TicketRecord ticketRecord = context.fetchOne(TICKET, TICKET.ID.eq(ticket.getId()));
         if (ticketRecord == null) {
+
+            //Record wasn't found, so let's create one
             ticketRecord = context.newRecord(TICKET);
+            ticket.setCreatedTime(LocalDateTime.now());
+            ticket.setUpdatedTime(LocalDateTime.now());
             modelMapper.map(ticket, ticketRecord);
             ticketRecord.store();
+            ticketRecord = context.fetchOne(TICKET, TICKET.ID.eq(ticketRecord.getId()));
         }
         //ticket will have an ID, and may have other generated fields that we can return, so lets map it all back
         modelMapper.map(ticketRecord, ticket);
@@ -69,6 +85,7 @@ public class TicketService implements BasicService<Ticket>{
     public Ticket update(Ticket ticket){
         TicketRecord ticketRecord = context.fetchOne(TICKET, TICKET.ID.eq(ticket.getId()));
         if (ticketRecord != null) {
+            ticket.setUpdatedTime(LocalDateTime.now());
             modelMapper.map(ticket, ticketRecord);
             ticketRecord.store();
         }
