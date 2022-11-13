@@ -22,8 +22,9 @@ public class ContactController implements BasicController<Contact>{
      *
      * @return ArrayList of Contact objects
      */
-    @GetMapping
+
     @Override
+    @GetMapping
     public ResponseEntity<List<Contact>> getAll() {
         return new ResponseEntity<>(contactService.getAll(), HttpStatus.OK);
     }
@@ -33,8 +34,9 @@ public class ContactController implements BasicController<Contact>{
      * @param id The integer id of a contact
      * @return A single Contact object
      */
-    @GetMapping("/{id}")
+
     @Override
+    @GetMapping("/{id}")
     public ResponseEntity<Contact> getByID(@PathVariable Integer id) {
         return new ResponseEntity<>(contactService.getByID(id), HttpStatus.OK);
     }
@@ -44,11 +46,13 @@ public class ContactController implements BasicController<Contact>{
      * @param contact A Contact object
      * @return String "Done"
      */
-    @PostMapping
+
     @Override
+    @PostMapping
+    @ResponseBody
     public ResponseEntity<Contact> create(@Valid @RequestBody Contact contact) {
         Contact resultContact = contactService.create(contact);
-        return new ResponseEntity<>(resultContact, HttpStatus.OK);
+        return new ResponseEntity<>(resultContact, HttpStatus.CREATED);
     }
 
     /**
@@ -56,11 +60,12 @@ public class ContactController implements BasicController<Contact>{
      * @param contact A Contact object
      * @return String "Done"
      */
-    @PutMapping
     @Override
+    @PutMapping
+    @ResponseBody
     public ResponseEntity<Contact> update(@RequestBody Contact contact) {
         Contact resultContact = contactService.update(contact);
-        return new ResponseEntity<>(resultContact, HttpStatus.OK);
+        return new ResponseEntity<>(resultContact, HttpStatus.CREATED);
     }
 
     /**
@@ -68,8 +73,9 @@ public class ContactController implements BasicController<Contact>{
      * @param id The integer id of a contact
      * @return String "Contact Deleted"
      */
-    @DeleteMapping("/{id}")
     @Override
+    @DeleteMapping("/{id}")
+    @ResponseBody
     public ResponseEntity<String> delete(@PathVariable Integer id) {
         contactService.delete(id);
         return new ResponseEntity<>("Contact deleted", HttpStatus.OK);

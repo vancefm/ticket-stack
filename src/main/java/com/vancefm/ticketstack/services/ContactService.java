@@ -53,12 +53,26 @@ public class ContactService implements BasicService<Contact>{
 
     @Override
     public Contact create(Contact contact) {
-        return jooqStore(contact);
+        ContactRecord contactRecord = context.fetchOne(CONTACT, CONTACT.EMAIL_ADDRESS.eq(contact.getEmailAddress()));
+        if (contactRecord == null) {
+            contactRecord = context.newRecord(CONTACT);
+            modelMapper.map(contact, contactRecord);
+            contactRecord.store();
+        }
+        //contact will have an ID, and may have other generated fields that we can return, so lets map it all back
+        modelMapper.map(contactRecord, contact);
+        return contact;
+
     }
 
     @Override
     public Contact update(Contact contact) {
-        return jooqStore(contact);
+        ContactRecord contactRecord = context.fetchOne(CONTACT, CONTACT.EMAIL_ADDRESS.eq(contact.getEmailAddress()));
+        if (contactRecord != null) {
+            modelMapper.map(contact, contactRecord);
+            contactRecord.store();
+        }
+        return null;
     }
 
     @Override
@@ -66,25 +80,6 @@ public class ContactService implements BasicService<Contact>{
         ContactRecord contactRecord = context.fetchOne(CONTACT, CONTACT.ID.eq(id));
         if (contactRecord != null) {
             contactRecord.delete();
-        }
-    }
-
-    private Contact jooqStore(Contact contact){
-        ContactRecord contactRecord = context.fetchOne(CONTACT, CONTACT.EMAIL_ADDRESS.eq(contact.getEmailAddress()));
-        if (contactRecord == null) {
-            contactRecord = context.newRecord(CONTACT);
-            modelMapper.map(contact, contactRecord);
-        }
-
-        try {
-            context.loadInto(CONTACT)
-                    .onDuplicateKeyUpdate()
-                    .loadRecords(contactRecord)
-                    .fieldsCorresponding()
-                    .execute();
-            return contact;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 }

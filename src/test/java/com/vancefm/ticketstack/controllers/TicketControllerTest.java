@@ -99,7 +99,6 @@ public class TicketControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
-
     }
 
     @Test

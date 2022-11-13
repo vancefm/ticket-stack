@@ -46,9 +46,9 @@ public class ContactControllerTest {
     @Test
     public void shouldGetAllContacts() throws Exception{
 
-        Contact contactOne = new Contact(-1, "user1@localhost.com", "UserOne", "Person");
-        Contact contactTwo = new Contact(-2, "user2@localhost.com", "UserTwo", "Person");
-        Contact contactThree = new Contact(-3, "user3@localhost.com", "UserTwo", "Person");
+        Contact contactOne = new Contact(1, "user1@localhost.com", "UserOne", "Person");
+        Contact contactTwo = new Contact(2, "user2@localhost.com", "UserTwo", "Person");
+        Contact contactThree = new Contact(3, "user3@localhost.com", "UserTwo", "Person");
         List<Contact> contactList = Stream.of(contactOne, contactTwo, contactThree).collect(Collectors.toList());
 
         Mockito.when(contactService.getAll()).thenReturn(contactList);
@@ -68,7 +68,7 @@ public class ContactControllerTest {
 
     @Test
     public void shouldGetAContact() throws Exception{
-        Contact contactOne = new Contact(-1, "user1@localhost.com", "UserOne", "Person");
+        Contact contactOne = new Contact(1, "user1@localhost.com", "UserOne", "Person");
 
         Mockito.when(contactService.getByID(1)).thenReturn(contactOne);
 
@@ -80,22 +80,42 @@ public class ContactControllerTest {
 
         Contact contact = mapper.readValue(result.getResponse().getContentAsString(), Contact.class);
 
-        assertEquals(-1, contact.getId());
+        assertEquals(1, contact.getId());
     }
 
     @Test
     public void shouldCreateAContact() throws Exception{
 
-        //given proper data, should create a ticket and return something appropriate
+        Contact contactOne = new Contact(0, "user1@localhost.com", "UserOne", "Person");
+        Contact contactTwo = new Contact(1, "user1@localhost.com", "UserOne", "Person");
 
+        Mockito.when(contactService.create(contactOne)).thenReturn(contactTwo);
+
+        MvcResult result = mockMvc
+                .perform(
+                        post("/contact")
+                                .content(mapper.writeValueAsString(contactOne))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
     }
 
     @Test
     public void shouldUpdateAContact() throws Exception{
 
-        //given proper data, should create a ticket and return something appropriate
+        Contact contactOne = new Contact(1, "user1@localhost.com", "UserOne", "Person");
+
+        MvcResult result = mockMvc
+                .perform(
+                        put("/contact")
+                                .content(mapper.writeValueAsString(contactOne))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andExpect(content().string(""))
+                .andReturn();
 
     }
-
-
 }

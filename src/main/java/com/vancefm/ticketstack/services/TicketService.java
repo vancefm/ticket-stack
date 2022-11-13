@@ -60,8 +60,8 @@ public class TicketService implements BasicService<Ticket>{
             ticketRecord = context.newRecord(TICKET);
             modelMapper.map(ticket, ticketRecord);
             ticketRecord.store();
-            modelMapper.map(ticketRecord, ticket);
         }
+        //ticket will have an ID, and may have other generated fields that we can return, so lets map it all back
         modelMapper.map(ticketRecord, ticket);
         return ticket;
     }

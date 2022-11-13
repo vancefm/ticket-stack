@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -50,7 +51,7 @@ public class TicketController implements BasicController<Ticket>{
     @Override
     @PostMapping
     @ResponseBody
-    public ResponseEntity<Ticket> create(@RequestBody Ticket ticket){
+    public ResponseEntity<Ticket> create(@Valid @RequestBody Ticket ticket){
         Ticket resultTicket = ticketService.create(ticket);
         return new ResponseEntity<>(resultTicket, HttpStatus.CREATED);
     }
