@@ -1,7 +1,7 @@
 package com.vancefm.ticketstack.services;
 
-import com.vancefm.ticketstack.pojos.Ticket;
 import com.vancefm.ticketstack.models.tables.records.TicketRecord;
+import com.vancefm.ticketstack.pojos.Ticket;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Result;
@@ -11,12 +11,8 @@ import org.modelmapper.jooq.RecordValueReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.List;
-import java.util.TimeZone;
 
 import static com.vancefm.ticketstack.models.tables.Ticket.TICKET;
 
