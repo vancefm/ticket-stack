@@ -55,36 +55,30 @@ public class TicketService implements BasicService<Ticket>{
 
 
     public Ticket create(Ticket ticket){
-        return jooqStore(ticket);
+        TicketRecord ticketRecord = context.fetchOne(TICKET, TICKET.ID.eq(ticket.getId()));
+        if (ticketRecord == null) {
+            ticketRecord = context.newRecord(TICKET);
+            modelMapper.map(ticket, ticketRecord);
+            ticketRecord.store();
+            modelMapper.map(ticketRecord, ticket);
+        }
+        modelMapper.map(ticketRecord, ticket);
+        return ticket;
     }
 
     public Ticket update(Ticket ticket){
-        return jooqStore(ticket);
+        TicketRecord ticketRecord = context.fetchOne(TICKET, TICKET.ID.eq(ticket.getId()));
+        if (ticketRecord != null) {
+            modelMapper.map(ticket, ticketRecord);
+            ticketRecord.store();
+        }
+        return null;
     }
 
     public void delete(Integer id){
         TicketRecord ticketRecord = context.fetchOne(TICKET, TICKET.ID.eq(id));
         if (ticketRecord != null) {
             ticketRecord.delete();
-        }
-    }
-
-    private Ticket jooqStore(Ticket ticket){
-        TicketRecord ticketRecord = context.fetchOne(TICKET, TICKET.ID.eq(ticket.getId()));
-        if (ticketRecord == null) {
-            ticketRecord = context.newRecord(TICKET);
-            modelMapper.map(ticket, ticketRecord);
-        }
-
-        try{
-            context.loadInto(TICKET)
-                    .onDuplicateKeyUpdate()
-                    .loadRecords(ticketRecord)
-                    .fieldsCorresponding()
-                    .execute();
-            return ticket;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 }

@@ -52,7 +52,7 @@ public class TicketController implements BasicController<Ticket>{
     @ResponseBody
     public ResponseEntity<Ticket> create(@RequestBody Ticket ticket){
         Ticket resultTicket = ticketService.create(ticket);
-        return new ResponseEntity<>(resultTicket, HttpStatus.OK);
+        return new ResponseEntity<>(resultTicket, HttpStatus.CREATED);
     }
 
     /**
@@ -66,7 +66,7 @@ public class TicketController implements BasicController<Ticket>{
     @ResponseBody
     public ResponseEntity<Ticket> update(@RequestBody Ticket ticket){
         Ticket resultTicket = ticketService.update(ticket);
-        return new ResponseEntity<>(resultTicket, HttpStatus.OK);
+        return new ResponseEntity<>(resultTicket, HttpStatus.CREATED);
     }
 
     /**

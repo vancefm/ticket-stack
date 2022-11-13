@@ -86,44 +86,14 @@ public class ContactControllerTest {
     @Test
     public void shouldCreateAContact() throws Exception{
 
-        Contact contactOne = new Contact(-1, "user1@localhost.com", "UserOne", "Person");
-
-        Mockito.when(contactService.create(contactOne)).thenReturn(contactOne);
-
-        MvcResult result = mockMvc
-                .perform(post("/contact")
-                        .content(mapper.writeValueAsString(contactOne))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andReturn();
-
-        Contact resultContact = mapper.readValue(result.getResponse().getContentAsString(), Contact.class);
-
-        assertEquals(contactOne, resultContact);
+        //given proper data, should create a ticket and return something appropriate
 
     }
 
     @Test
     public void shouldUpdateAContact() throws Exception{
 
-        Contact contactOne = new Contact(-1, "user1@localhost.com", "UserOne", "Person");
-
-        Mockito.when(contactService.update(contactOne)).thenReturn(contactOne);
-
-        MvcResult result = mockMvc
-                .perform(put("/contact")
-                        .content(mapper.writeValueAsString(contactOne))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andReturn();
-
-        Contact resultContact = mapper.readValue(result.getResponse().getContentAsString(), Contact.class);
-
-        assertEquals(contactOne, resultContact);
+        //given proper data, should create a ticket and return something appropriate
 
     }
 
