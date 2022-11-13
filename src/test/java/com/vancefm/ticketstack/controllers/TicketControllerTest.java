@@ -45,9 +45,9 @@ public class TicketControllerTest {
     @Test
     public void shouldGetAllTickets() throws Exception{
 
-        Ticket ticketOne = new Ticket(-1,"Test ticket 1",0,0,"",0,null,null,null);
-        Ticket ticketTwo = new Ticket(-2,"Test ticket 1",0,0,"",0,null,null,null);
-        Ticket ticketThree = new Ticket(-3,"Test ticket 1",0,0,"",0,null,null,null);
+        Ticket ticketOne = new Ticket(1,"Test ticket 1",0,0,"",0,null,null,null);
+        Ticket ticketTwo = new Ticket(2,"Test ticket 1",0,0,"",0,null,null,null);
+        Ticket ticketThree = new Ticket(3,"Test ticket 1",0,0,"",0,null,null,null);
         List<Ticket> ticketList = Stream.of(ticketOne, ticketTwo, ticketThree).collect(Collectors.toList());
 
         Mockito.when(ticketService.getAll()).thenReturn(ticketList);
@@ -67,7 +67,7 @@ public class TicketControllerTest {
 
     @Test
     public void shouldGetATicket() throws Exception{
-        Ticket ticketOne = new Ticket(-1,"Test ticket 1",0,0,"",0,null,null,null);
+        Ticket ticketOne = new Ticket(1,"Test ticket 1",0,0,"",0,null,null,null);
 
         Mockito.when(ticketService.getByID(1)).thenReturn(ticketOne);
 
@@ -79,51 +79,42 @@ public class TicketControllerTest {
 
         Ticket ticket = mapper.readValue(result.getResponse().getContentAsString(), Ticket.class);
 
-        assertEquals(-1, ticket.getId());
+        assertEquals(1, ticket.getId());
     }
 
     @Test
     public void shouldCreateATicket() throws Exception{
 
-        Ticket ticketOne = new Ticket(-1,"Test ticket 1",0,0,"",0,null,null,null);
+        Ticket ticketOne = new Ticket(null,"Test ticket 1",0,0,"",0,null,null,null);
+        Ticket ticketTwo = new Ticket(1,"Test ticket 1",0,0,"",0,null,null,null);
 
-        Mockito.when(ticketService.create(ticketOne)).thenReturn(ticketOne);
+        Mockito.when(ticketService.create(ticketOne)).thenReturn(ticketTwo);
 
         MvcResult result = mockMvc
-                .perform(post("/ticket")
-                        .content(mapper.writeValueAsString(ticketOne))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
+                .perform(
+                        post("/ticket")
+                                .content(mapper.writeValueAsString(ticketOne))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
-
-        Ticket resultTicket = mapper.readValue(result.getResponse().getContentAsString(), Ticket.class);
-
-        assertEquals(ticketOne, resultTicket);
-
     }
 
     @Test
     public void shouldUpdateATicket() throws Exception{
 
-        Ticket ticketOne = new Ticket(-1,"Test ticket 1",0,0,"",0,null,null,null);
-
-        Mockito.when(ticketService.update(ticketOne)).thenReturn(ticketOne);
+        Ticket ticketOne = new Ticket(1,"Test ticket 1",0,0,"",0,null,null,null);
 
         MvcResult result = mockMvc
-                .perform(put("/ticket")
-                        .content(mapper.writeValueAsString(ticketOne))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .perform(
+                        put("/ticket")
+                                .content(mapper.writeValueAsString(ticketOne))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andExpect(content().string(""))
                 .andReturn();
-
-        Ticket resultTicket = mapper.readValue(result.getResponse().getContentAsString(), Ticket.class);
-
-        assertEquals(ticketOne, resultTicket);
-
     }
 
 }
