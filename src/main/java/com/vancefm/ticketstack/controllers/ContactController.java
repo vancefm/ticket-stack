@@ -61,10 +61,10 @@ public class ContactController implements BasicController<Contact>{
      * @return String "Done"
      */
     @Override
-    @PutMapping
+    @PutMapping("/{id}")
     @ResponseBody
-    public ResponseEntity<Contact> update(@RequestBody Contact contact) {
-        Contact resultContact = contactService.update(contact);
+    public ResponseEntity<Contact> update(@PathVariable Integer id, @Valid @RequestBody Contact contact) {
+        Contact resultContact = contactService.update(id, contact);
         return new ResponseEntity<>(resultContact, HttpStatus.CREATED);
     }
 

@@ -86,7 +86,7 @@ public class ContactControllerTest {
     @Test
     public void shouldCreateAContact() throws Exception{
 
-        Contact contactOne = new Contact(0, "user1@localhost.com", "UserOne", "Person");
+        Contact contactOne = new Contact(null, "user1@localhost.com", "UserOne", "Person");
         Contact contactTwo = new Contact(1, "user1@localhost.com", "UserOne", "Person");
 
         Mockito.when(contactService.create(contactOne)).thenReturn(contactTwo);
@@ -109,7 +109,7 @@ public class ContactControllerTest {
 
         MvcResult result = mockMvc
                 .perform(
-                        put("/contact")
+                        put("/contact/1")
                                 .content(mapper.writeValueAsString(contactOne))
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON))
