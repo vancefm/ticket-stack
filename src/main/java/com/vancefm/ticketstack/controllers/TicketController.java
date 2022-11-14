@@ -63,10 +63,10 @@ public class TicketController implements BasicController<Ticket>{
      * @return String "Done"
      */
     @Override
-    @PutMapping
+    @PutMapping("/{id}")
     @ResponseBody
-    public ResponseEntity<Ticket> update(@RequestBody Ticket ticket){
-        Ticket resultTicket = ticketService.update(ticket);
+    public ResponseEntity<Ticket> update(@PathVariable Integer id, @Valid @RequestBody Ticket ticket){
+        Ticket resultTicket = ticketService.update(id, ticket);
         return new ResponseEntity<>(resultTicket, HttpStatus.CREATED);
     }
 

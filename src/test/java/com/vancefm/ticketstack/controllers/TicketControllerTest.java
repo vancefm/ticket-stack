@@ -108,7 +108,7 @@ public class TicketControllerTest {
 
         MvcResult result = mockMvc
                 .perform(
-                        put("/ticket")
+                        put("/ticket/1")
                                 .content(mapper.writeValueAsString(ticketOne))
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON))

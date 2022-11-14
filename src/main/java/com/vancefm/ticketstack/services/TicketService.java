@@ -78,7 +78,7 @@ public class TicketService implements BasicService<Ticket>{
         return ticket;
     }
 
-    public Ticket update(Ticket ticket){
+    public Ticket update(Integer id, Ticket ticket){
         TicketRecord ticketRecord = context.fetchOne(TICKET, TICKET.ID.eq(ticket.getId()));
         if (ticketRecord != null) {
             ticket.setUpdatedTime(LocalDateTime.now());

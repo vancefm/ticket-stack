@@ -2,6 +2,7 @@ package com.vancefm.ticketstack.services;
 
 import com.vancefm.ticketstack.pojos.Contact;
 import com.vancefm.ticketstack.models.tables.records.ContactRecord;
+import com.vancefm.ticketstack.pojos.Ticket;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Result;
@@ -11,7 +12,6 @@ import org.modelmapper.jooq.RecordValueReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.List;
 
 import static com.vancefm.ticketstack.models.tables.Contact.CONTACT;
@@ -66,7 +66,7 @@ public class ContactService implements BasicService<Contact>{
     }
 
     @Override
-    public Contact update(Contact contact) {
+    public Contact update(Integer id, Contact contact) {
         ContactRecord contactRecord = context.fetchOne(CONTACT, CONTACT.EMAIL_ADDRESS.eq(contact.getEmailAddress()));
         if (contactRecord != null) {
             modelMapper.map(contact, contactRecord);

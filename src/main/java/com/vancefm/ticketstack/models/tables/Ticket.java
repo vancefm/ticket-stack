@@ -82,12 +82,12 @@ public class Ticket extends TableImpl<TicketRecord> {
     /**
      * The column <code>ticketstack.ticket.created_time</code>.
      */
-    public final TableField<TicketRecord, LocalDateTime> CREATED_TIME = createField(DSL.name("created_time"), SQLDataType.LOCALDATETIME(0).nullable(false).defaultValue(DSL.field("current_timestamp()", SQLDataType.LOCALDATETIME)), this, "");
+    public final TableField<TicketRecord, LocalDateTime> CREATED_TIME = createField(DSL.name("created_time"), SQLDataType.LOCALDATETIME(0).defaultValue(DSL.inline("NULL", SQLDataType.LOCALDATETIME)), this, "");
 
     /**
      * The column <code>ticketstack.ticket.updated_time</code>.
      */
-    public final TableField<TicketRecord, LocalDateTime> UPDATED_TIME = createField(DSL.name("updated_time"), SQLDataType.LOCALDATETIME(0).nullable(false).defaultValue(DSL.field("current_timestamp()", SQLDataType.LOCALDATETIME)), this, "");
+    public final TableField<TicketRecord, LocalDateTime> UPDATED_TIME = createField(DSL.name("updated_time"), SQLDataType.LOCALDATETIME(0).defaultValue(DSL.inline("NULL", SQLDataType.LOCALDATETIME)), this, "");
 
     /**
      * The column <code>ticketstack.ticket.closed_time</code>.
