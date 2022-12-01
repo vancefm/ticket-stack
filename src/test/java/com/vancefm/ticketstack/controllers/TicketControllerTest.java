@@ -1,6 +1,5 @@
 package com.vancefm.ticketstack.controllers;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
@@ -9,7 +8,6 @@ import com.vancefm.ticketstack.pojos.Ticket;
 import com.vancefm.ticketstack.services.TicketService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,8 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -43,14 +40,14 @@ public class TicketControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    public void shouldGetAllTickets() throws Exception{
+    public void get_shouldGetAllTickets_andReturnStatusOk() throws Exception{
 
         Ticket ticketOne = new Ticket(1,"Test ticket 1",0,0,"",0,null,null,null);
         Ticket ticketTwo = new Ticket(2,"Test ticket 1",0,0,"",0,null,null,null);
         Ticket ticketThree = new Ticket(3,"Test ticket 1",0,0,"",0,null,null,null);
         List<Ticket> ticketList = Stream.of(ticketOne, ticketTwo, ticketThree).collect(Collectors.toList());
 
-        Mockito.when(ticketService.getAll()).thenReturn(ticketList);
+        when(ticketService.getAll()).thenReturn(ticketList);
 
         MvcResult result = mockMvc
                 .perform(get("/ticket"))
@@ -58,37 +55,28 @@ public class TicketControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.size()", Matchers.is(3)))
                 .andReturn();
-
-        List<Ticket> resultList = mapper.readValue(result.getResponse().getContentAsString(), new TypeReference<List<Ticket>>() {});
-
-        assertTrue(resultList.size() == 3);
-
     }
 
     @Test
-    public void shouldGetATicket() throws Exception{
+    public void get_shouldGetATicket_andReturnStatusOk() throws Exception{
         Ticket ticketOne = new Ticket(1,"Test ticket 1",0,0,"",0,null,null,null);
 
-        Mockito.when(ticketService.getByID(1)).thenReturn(ticketOne);
+        when(ticketService.getByID(1)).thenReturn(ticketOne);
 
         MvcResult result = mockMvc
                 .perform(get("/ticket/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
-
-        Ticket ticket = mapper.readValue(result.getResponse().getContentAsString(), Ticket.class);
-
-        assertEquals(1, ticket.getId());
     }
 
     @Test
-    public void shouldCreateATicket() throws Exception{
+    public void post_shouldCreateATicket_andReturnStatusIsCreated() throws Exception{
 
         Ticket ticketOne = new Ticket(null,"Test ticket 1",0,0,"",0,null,null,null);
         Ticket ticketTwo = new Ticket(1,"Test ticket 1",0,0,"",0,null,null,null);
 
-        Mockito.when(ticketService.create(ticketOne)).thenReturn(ticketTwo);
+        when(ticketService.create(ticketOne)).thenReturn(ticketTwo);
 
         MvcResult result = mockMvc
                 .perform(
@@ -102,9 +90,11 @@ public class TicketControllerTest {
     }
 
     @Test
-    public void shouldUpdateATicket() throws Exception{
+    public void put_shouldUpdateATicket_andReturnStatusIsOk() throws Exception{
 
-        Ticket ticketOne = new Ticket(1,"Test ticket 1",0,0,"",0,null,null,null);
+        Ticket ticketOne = new Ticket(1,"Test ticket 1 - updated",0,0,"",0,null,null,null);
+
+        when(ticketService.update(ticketOne.getId(), ticketOne)).thenReturn(ticketOne);
 
         MvcResult result = mockMvc
                 .perform(
@@ -112,9 +102,10 @@ public class TicketControllerTest {
                                 .content(mapper.writeValueAsString(ticketOne))
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated())
-                .andExpect(content().string(""))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
+
     }
 
 }

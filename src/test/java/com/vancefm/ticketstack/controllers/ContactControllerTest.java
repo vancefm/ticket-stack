@@ -1,7 +1,6 @@
 package com.vancefm.ticketstack.controllers;
 
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
@@ -23,8 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -44,7 +42,7 @@ public class ContactControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    public void shouldGetAllContacts() throws Exception{
+    public void get_shouldGetAllContacts_andReturnStatusOk() throws Exception{
 
         Contact contactOne = new Contact(1, "user1@localhost.com", "UserOne", "Person");
         Contact contactTwo = new Contact(2, "user2@localhost.com", "UserTwo", "Person");
@@ -59,15 +57,10 @@ public class ContactControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.size()", Matchers.is(3)))
                 .andReturn();
-
-        List<Contact> resultList = mapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {});
-
-        assertTrue(resultList.size() == 3);
-
     }
 
     @Test
-    public void shouldGetAContact() throws Exception{
+    public void get_shouldGetAContact_andReturnStatusOk() throws Exception{
         Contact contactOne = new Contact(1, "user1@localhost.com", "UserOne", "Person");
 
         Mockito.when(contactService.getByID(1)).thenReturn(contactOne);
@@ -77,14 +70,10 @@ public class ContactControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
-
-        Contact contact = mapper.readValue(result.getResponse().getContentAsString(), Contact.class);
-
-        assertEquals(1, contact.getId());
     }
 
     @Test
-    public void shouldCreateAContact() throws Exception{
+    public void post_shouldCreateAContact_andReturnStatusIsCreated() throws Exception{
 
         Contact contactOne = new Contact(null, "user1@localhost.com", "UserOne", "Person");
         Contact contactTwo = new Contact(1, "user1@localhost.com", "UserOne", "Person");
@@ -103,9 +92,11 @@ public class ContactControllerTest {
     }
 
     @Test
-    public void shouldUpdateAContact() throws Exception{
+    public void put_shouldUpdateAContact_andReturnStatusIsOk() throws Exception{
 
         Contact contactOne = new Contact(1, "user1@localhost.com", "UserOne", "Person");
+
+        when(contactService.update(contactOne.getId(), contactOne)).thenReturn(contactOne);
 
         MvcResult result = mockMvc
                 .perform(
@@ -113,8 +104,8 @@ public class ContactControllerTest {
                                 .content(mapper.writeValueAsString(contactOne))
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated())
-                .andExpect(content().string(""))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
 
     }

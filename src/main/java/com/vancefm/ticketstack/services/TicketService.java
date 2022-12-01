@@ -61,11 +61,8 @@ public class TicketService implements BasicService<Ticket>{
 
     public Ticket create(Ticket ticket){
 
-        //See if a record exists
-        TicketRecord ticketRecord = context.fetchOne(TICKET, TICKET.ID.eq(ticket.getId()));
-        if (ticketRecord == null) {
-
-            //Record wasn't found, so let's create one
+        TicketRecord ticketRecord = null;
+        if (ticket != null) {
             ticketRecord = context.newRecord(TICKET);
             ticket.setCreatedTime(LocalDateTime.now());
             ticket.setUpdatedTime(LocalDateTime.now());
@@ -73,25 +70,31 @@ public class TicketService implements BasicService<Ticket>{
             ticketRecord.store();
             ticketRecord = context.fetchOne(TICKET, TICKET.ID.eq(ticketRecord.getId()));
         }
+
         //ticket will have an ID, and may have other generated fields that we can return, so lets map it all back
         modelMapper.map(ticketRecord, ticket);
         return ticket;
     }
 
     public Ticket update(Integer id, Ticket ticket){
-        TicketRecord ticketRecord = context.fetchOne(TICKET, TICKET.ID.eq(ticket.getId()));
+        TicketRecord ticketRecord = context.fetchOne(TICKET, TICKET.ID.eq(id));
         if (ticketRecord != null) {
             ticket.setUpdatedTime(LocalDateTime.now());
             modelMapper.map(ticket, ticketRecord);
             ticketRecord.store();
         }
-        return null;
+        return ticket;
     }
 
-    public void delete(Integer id){
+    public Ticket delete(Integer id){
         TicketRecord ticketRecord = context.fetchOne(TICKET, TICKET.ID.eq(id));
+        Ticket ticket = null;
         if (ticketRecord != null) {
+            ticket = new Ticket();
+            modelMapper.map(ticketRecord, ticket);
             ticketRecord.delete();
+            return ticket;
         }
+        return null;
     }
 }

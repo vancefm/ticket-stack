@@ -1,8 +1,7 @@
 package com.vancefm.ticketstack.services;
 
-import com.vancefm.ticketstack.pojos.Contact;
 import com.vancefm.ticketstack.models.tables.records.ContactRecord;
-import com.vancefm.ticketstack.pojos.Ticket;
+import com.vancefm.ticketstack.pojos.Contact;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.jooq.Result;
@@ -76,10 +75,14 @@ public class ContactService implements BasicService<Contact>{
     }
 
     @Override
-    public void delete(Integer id) {
+    public Contact delete(Integer id) {
         ContactRecord contactRecord = context.fetchOne(CONTACT, CONTACT.ID.eq(id));
+        Contact contact = null;
         if (contactRecord != null) {
             contactRecord.delete();
+            modelMapper.map(contactRecord, contact);
+            return contact;
         }
+        return null;
     }
 }
