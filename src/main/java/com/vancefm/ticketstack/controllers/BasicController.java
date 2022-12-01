@@ -9,5 +9,5 @@ public interface BasicController<T> {
     ResponseEntity<T> getByID(Integer id);
     ResponseEntity<T> create(T t);
     ResponseEntity<T> update(Integer id, T t);
-    ResponseEntity<String> delete(Integer id);
+    ResponseEntity<T> delete(Integer id);
 }
