@@ -2,7 +2,6 @@ package com.vancefm.ticketstack.controllers;
 
 import com.vancefm.ticketstack.pojos.Contact;
 import com.vancefm.ticketstack.services.ContactService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +14,11 @@ import java.util.List;
 @RequestMapping(value = "/contact")
 public class ContactController implements BasicController<Contact>{
 
-    @Autowired
-    ContactService contactService;
+    private final ContactService contactService;
+
+    public ContactController(ContactService contactService) {
+        this.contactService = contactService;
+    }
 
     /**
      * Get a list of all contacts

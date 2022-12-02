@@ -2,7 +2,6 @@ package com.vancefm.ticketstack.controllers;
 
 import com.vancefm.ticketstack.pojos.Ticket;
 import com.vancefm.ticketstack.services.TicketService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +14,11 @@ import java.util.List;
 @RequestMapping(value = "/ticket")
 public class TicketController implements BasicController<Ticket>{
 
-    @Autowired
-    private TicketService ticketService;
+    private final TicketService ticketService;
+
+    public TicketController(TicketService ticketService) {
+        this.ticketService = ticketService;
+    }
 
     /**
      * Get a list of all tickets

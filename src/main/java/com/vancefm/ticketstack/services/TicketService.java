@@ -8,7 +8,6 @@ import org.jooq.Result;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.NameTokenizers;
 import org.modelmapper.jooq.RecordValueReader;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -19,13 +18,13 @@ import static com.vancefm.ticketstack.models.tables.Ticket.TICKET;
 @Service
 public class TicketService implements BasicService<Ticket>{
 
-    @Autowired
-    DSLContext context;
+    private final DSLContext context;
 
     private final ModelMapper modelMapper = new ModelMapper();
 
-    TicketService(){
+    TicketService(DSLContext context){
         modelMapper.getConfiguration().setSourceNameTokenizer(NameTokenizers.UNDERSCORE);
+        this.context = context;
     }
 
     public List<Ticket> getAll(){
