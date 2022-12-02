@@ -8,7 +8,6 @@ import org.jooq.Result;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.NameTokenizers;
 import org.modelmapper.jooq.RecordValueReader;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,8 +17,11 @@ import static com.vancefm.ticketstack.models.tables.Contact.CONTACT;
 @Service
 public class ContactService implements BasicService<Contact>{
 
-    @Autowired
-    DSLContext context;
+    private DSLContext context;
+
+    public ContactService(DSLContext context) {
+        this.context = context;
+    }
 
     private final ModelMapper modelMapper = new ModelMapper();
 

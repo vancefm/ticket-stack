@@ -109,4 +109,23 @@ public class ContactControllerTest {
                 .andReturn();
 
     }
+
+    @Test
+    public void delete_shouldDeleteAContact_andReturnStatusIsOk() throws Exception{
+
+        Contact contactOne = new Contact(1, "user1@localhost.com", "UserOne", "Person");
+
+        when(contactService.delete(contactOne.getId())).thenReturn(contactOne);
+
+        MvcResult result = mockMvc
+                .perform(
+                        delete("/contact/1")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+
+
+    }
 }

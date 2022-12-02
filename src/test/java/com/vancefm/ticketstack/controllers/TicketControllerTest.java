@@ -108,4 +108,23 @@ public class TicketControllerTest {
 
     }
 
+    @Test
+    public void delete_shouldDeleteATicket_andReturnStatusIsOk() throws Exception{
+
+        Ticket ticketOne = new Ticket(1,"Test ticket 1 - updated",0,0,"",0,null,null,null);
+
+        when(ticketService.delete(ticketOne.getId())).thenReturn(ticketOne);
+
+        MvcResult result = mockMvc
+                .perform(
+                        delete("/ticket/1")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+
+
+    }
+
 }
