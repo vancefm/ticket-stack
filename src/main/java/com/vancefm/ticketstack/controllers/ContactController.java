@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -30,7 +31,11 @@ public class ContactController implements BasicController<Contact>{
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<List<Contact>> getAll() {
-        return new ResponseEntity<>(contactService.getAll(), HttpStatus.OK);
+        List<Contact> resultList = contactService.getAll();
+        if (resultList != null) {
+            return new ResponseEntity<>(contactService.getAll(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     /**
@@ -43,7 +48,15 @@ public class ContactController implements BasicController<Contact>{
     @GetMapping(value = "/{pathId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Contact> getByID(@PathVariable Integer pathId) {
-        return new ResponseEntity<>(contactService.getByID(pathId), HttpStatus.OK);
+
+        Contact result = contactService.getByID(pathId);
+        if(result != null){
+            return new ResponseEntity<>(contactService.getByID(pathId), HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
     }
 
     /**
@@ -56,8 +69,13 @@ public class ContactController implements BasicController<Contact>{
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Contact> create(@Valid @RequestBody Contact contact) {
-        Contact resultContact = contactService.create(contact);
-        return new ResponseEntity<>(resultContact, HttpStatus.CREATED);
+
+        try {
+            Contact resultContact = contactService.create(contact);
+            return new ResponseEntity<>(resultContact, HttpStatus.CREATED);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Unable to create Contact. Contact already exists.", e);
+        }
     }
 
     /**

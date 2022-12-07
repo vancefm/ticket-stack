@@ -1,4 +1,4 @@
-package com.vancefm.ticketstack.errors;
+package com.vancefm.ticketstack.exceptionhandlers;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -24,6 +24,7 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", new Date());
         body.put("status", httpStatus.value());
+        body.put("reason", httpStatus.getReasonPhrase());
 
         //Get all errors
         List<String> errors = ex.getBindingResult()

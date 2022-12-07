@@ -2,14 +2,18 @@ package com.vancefm.ticketstack.controllers;
 
 import com.vancefm.ticketstack.pojos.Ticket;
 import com.vancefm.ticketstack.services.TicketService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping(value = "/ticket")
 public class TicketController implements BasicController<Ticket>{
@@ -29,7 +33,14 @@ public class TicketController implements BasicController<Ticket>{
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<List<Ticket>> getAll(){
-        return new ResponseEntity<>(ticketService.getAll(), HttpStatus.OK);
+        List<Ticket> resultList = ticketService.getAll();
+        if(resultList != null){
+            return new ResponseEntity<>(ticketService.getAll(), HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
     }
 
     /**
@@ -42,7 +53,14 @@ public class TicketController implements BasicController<Ticket>{
     @GetMapping(value = "/{pathId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Ticket> getByID(@PathVariable Integer pathId) {
-        return new ResponseEntity<>(ticketService.getByID(pathId), HttpStatus.OK);
+
+        Ticket result = ticketService.getByID(pathId);
+        if(result != null){
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     /**
@@ -55,8 +73,12 @@ public class TicketController implements BasicController<Ticket>{
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Ticket> create(@Valid @RequestBody Ticket ticket){
-        Ticket resultTicket = ticketService.create(ticket);
-        return new ResponseEntity<>(resultTicket, HttpStatus.CREATED);
+        try {
+            Ticket resultTicket = ticketService.create(ticket);
+            return new ResponseEntity<>(resultTicket, HttpStatus.CREATED);
+        } catch (DuplicateKeyException e) {
+            throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Unable to create Ticket. Ticket already exists.", e);
+        }
     }
 
     /**

@@ -14,4 +14,7 @@ This app uses docker compose.
 3. Rebuild image, container and run: `docker-compose up --force-recreate --build -d` and then `docker image prune -f` to cleanup
 
 # Documentation
-API documentation is provided by SpringDoc and can be found at http://localhost:8080/swagger-ui/index.html
+API documentation by Swagger and can be found at http://localhost:8080/swagger-ui/index.html
+
+# Noted Features
+* Exceptions include description/reason message.
