@@ -29,10 +29,8 @@ public class ContactService implements BasicService<Contact>{
 
     @Override
     public List<Contact> getAll() {
-        return context
-                .select()
-                .from(CONTACT)
-                .fetchInto(Contact.class);
+        List<Contact> contactList = context.select().from(CONTACT).fetchInto(Contact.class);
+        return contactList;
     }
 
     @Override

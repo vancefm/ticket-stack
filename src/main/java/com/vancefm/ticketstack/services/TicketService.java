@@ -32,10 +32,9 @@ public class TicketService implements BasicService<Ticket>{
         //Note mysql timestamp datatype converts values to UTC for storing, and from UTC when retrieving
         //So depending on the database server timezone, the time values may be different than expected.
 
-        return context
-                .select()
-                .from(TICKET)
-                .fetchInto(Ticket.class);
+        List<Ticket> resultList = context.select().from(TICKET).fetchInto(Ticket.class);
+
+        return resultList;
     }
 
     public Ticket getByID(Integer id){
