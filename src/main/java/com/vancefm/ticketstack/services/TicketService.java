@@ -27,6 +27,7 @@ public class TicketService implements BasicService<Ticket>{
         this.context = context;
     }
 
+    @Override
     public List<Ticket> getAll(){
 
         //Note mysql timestamp datatype converts values to UTC for storing, and from UTC when retrieving
@@ -37,6 +38,7 @@ public class TicketService implements BasicService<Ticket>{
         return resultList;
     }
 
+    @Override
     public Ticket getByID(Integer id){
         //Note mysql timestamp datatype converts values to UTC for storing, and from UTC when retrieving
         //So depending on the database server timezone, the time values may be different than expected.
@@ -55,8 +57,7 @@ public class TicketService implements BasicService<Ticket>{
         }
     }
 
-
-
+    @Override
     public Ticket create(Ticket ticket){
 
         TicketRecord ticketRecord = null;
@@ -74,6 +75,7 @@ public class TicketService implements BasicService<Ticket>{
         return ticket;
     }
 
+    @Override
     public Ticket update(Integer id, Ticket ticket){
         TicketRecord ticketRecord = context.fetchOne(TICKET, TICKET.ID.eq(id));
         if (ticketRecord != null) {
@@ -84,6 +86,7 @@ public class TicketService implements BasicService<Ticket>{
         return ticket;
     }
 
+    @Override
     public Ticket delete(Integer id){
         TicketRecord ticketRecord = context.fetchOne(TICKET, TICKET.ID.eq(id));
         Ticket ticket = null;

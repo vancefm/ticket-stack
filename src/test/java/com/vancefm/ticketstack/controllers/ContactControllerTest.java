@@ -60,7 +60,7 @@ public class ContactControllerTest {
     }
 
     @Test
-    public void get_shouldGetAContact_andReturnStatusOk() throws Exception{
+    public void get_shouldGetAContactById_andReturnStatusOk() throws Exception{
         Contact contactOne = new Contact(1, "user1@localhost.com", "UserOne", "Person");
 
         Mockito.when(contactService.getByID(1)).thenReturn(contactOne);
