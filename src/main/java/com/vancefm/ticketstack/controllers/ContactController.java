@@ -1,7 +1,11 @@
 package com.vancefm.ticketstack.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vancefm.ticketstack.pojos.Contact;
 import com.vancefm.ticketstack.services.ContactService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -11,14 +15,19 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.validation.Valid;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping(value = "/contact")
 public class ContactController implements BasicController<Contact>{
 
     private final ContactService contactService;
 
+    private final ObjectMapper objectMapper;
+
     public ContactController(ContactService contactService) {
         this.contactService = contactService;
+        objectMapper = new ObjectMapper();
+        objectMapper.findAndRegisterModules();
     }
 
     /**
@@ -31,11 +40,16 @@ public class ContactController implements BasicController<Contact>{
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<List<Contact>> getAll() {
-        List<Contact> resultList = contactService.getAll();
-        if (resultList != null) {
-            return new ResponseEntity<>(contactService.getAll(), HttpStatus.OK);
+        try {
+            List<Contact> resultList = contactService.getAll();
+            log.info("Result: " + objectMapper.writeValueAsString(resultList));
+            if (resultList != null) {
+                return new ResponseEntity<>(contactService.getAll(), HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     /**
@@ -48,13 +62,17 @@ public class ContactController implements BasicController<Contact>{
     @GetMapping(value = "/{pathId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Contact> getByID(@PathVariable Integer pathId) {
-
-        Contact result = contactService.getByID(pathId);
-        if(result != null){
-            return new ResponseEntity<>(contactService.getByID(pathId), HttpStatus.OK);
-        }
-        else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        try {
+            Contact resultContact = contactService.getByID(pathId);
+            log.info("Result: " + objectMapper.writeValueAsString(resultContact));
+            if(resultContact != null){
+                return new ResponseEntity<>(contactService.getByID(pathId), HttpStatus.OK);
+            }
+            else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
 
     }
@@ -69,12 +87,14 @@ public class ContactController implements BasicController<Contact>{
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Contact> create(@Valid @RequestBody Contact contact) {
-
         try {
             Contact resultContact = contactService.create(contact);
+            log.info("Result: " + objectMapper.writeValueAsString(resultContact));
             return new ResponseEntity<>(resultContact, HttpStatus.CREATED);
-        } catch (Exception e) {
+        } catch (DuplicateKeyException e) {
             throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Unable to create Contact. Contact already exists.", e);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -87,8 +107,13 @@ public class ContactController implements BasicController<Contact>{
     @PutMapping(value = "/{pathId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Contact> update(@PathVariable Integer pathId, @Valid @RequestBody Contact contact) {
-        Contact resultContact = contactService.update(pathId, contact);
-        return new ResponseEntity<>(resultContact, HttpStatus.OK);
+        try {
+            Contact resultContact = contactService.update(pathId, contact);
+            log.info("Result: " + objectMapper.writeValueAsString(resultContact));
+            return new ResponseEntity<>(resultContact, HttpStatus.OK);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -100,12 +125,17 @@ public class ContactController implements BasicController<Contact>{
     @DeleteMapping(value = "/{pathId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Contact> delete(@PathVariable Integer pathId) {
-        Contact resultContact = contactService.delete(pathId);
-        if(resultContact != null){
-            return new ResponseEntity<>(resultContact, HttpStatus.OK);
-        }
-        else {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        try {
+            Contact resultContact = contactService.delete(pathId);
+            log.info("Result: " + objectMapper.writeValueAsString(resultContact));
+            if(resultContact != null){
+                return new ResponseEntity<>(resultContact, HttpStatus.OK);
+            }
+            else {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
     }
 }

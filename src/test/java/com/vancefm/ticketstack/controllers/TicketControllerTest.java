@@ -58,7 +58,7 @@ public class TicketControllerTest {
     }
 
     @Test
-    public void get_shouldGetATicket_andReturnStatusOk() throws Exception{
+    public void get_shouldGetATicketByID_andReturnStatusOk() throws Exception{
         Ticket ticketOne = new Ticket(1,"Test ticket 1",0,0,"",0,null,null,null);
 
         when(ticketService.getByID(1)).thenReturn(ticketOne);

@@ -1,5 +1,7 @@
 package com.vancefm.ticketstack.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vancefm.ticketstack.pojos.Ticket;
 import com.vancefm.ticketstack.services.TicketService;
 import lombok.extern.slf4j.Slf4j;
@@ -20,8 +22,12 @@ public class TicketController implements BasicController<Ticket>{
 
     private final TicketService ticketService;
 
+    private final ObjectMapper objectMapper;
+
     public TicketController(TicketService ticketService) {
         this.ticketService = ticketService;
+        objectMapper = new ObjectMapper();
+        objectMapper.findAndRegisterModules();
     }
 
     /**
@@ -33,12 +39,17 @@ public class TicketController implements BasicController<Ticket>{
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<List<Ticket>> getAll(){
-        List<Ticket> resultList = ticketService.getAll();
-        if(resultList != null){
-            return new ResponseEntity<>(ticketService.getAll(), HttpStatus.OK);
-        }
-        else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        try {
+            List<Ticket> resultList = ticketService.getAll();
+            log.info("Result: " + objectMapper.writeValueAsString(resultList));
+            if(resultList != null){
+                return new ResponseEntity<>(ticketService.getAll(), HttpStatus.OK);
+            }
+            else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
 
     }
@@ -54,12 +65,17 @@ public class TicketController implements BasicController<Ticket>{
     @ResponseBody
     public ResponseEntity<Ticket> getByID(@PathVariable Integer pathId) {
 
-        Ticket result = ticketService.getByID(pathId);
-        if(result != null){
-            return new ResponseEntity<>(result, HttpStatus.OK);
-        }
-        else{
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        try {
+            Ticket resultTicket = ticketService.getByID(pathId);
+            log.info("Result: " + objectMapper.writeValueAsString(resultTicket));
+            if(resultTicket != null){
+                return new ResponseEntity<>(resultTicket, HttpStatus.OK);
+            }
+            else{
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -75,9 +91,12 @@ public class TicketController implements BasicController<Ticket>{
     public ResponseEntity<Ticket> create(@Valid @RequestBody Ticket ticket){
         try {
             Ticket resultTicket = ticketService.create(ticket);
+            log.info("Result: " + objectMapper.writeValueAsString(resultTicket));
             return new ResponseEntity<>(resultTicket, HttpStatus.CREATED);
         } catch (DuplicateKeyException e) {
             throw new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED, "Unable to create Ticket. Ticket already exists.", e);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -91,8 +110,13 @@ public class TicketController implements BasicController<Ticket>{
     @PutMapping(value = "/{pathId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Ticket> update(@PathVariable Integer pathId, @Valid @RequestBody Ticket ticket){
-        Ticket resultTicket = ticketService.update(pathId, ticket);
-        return new ResponseEntity<>(resultTicket, HttpStatus.OK);
+        try {
+            Ticket resultTicket = ticketService.update(pathId, ticket);
+            log.info("Result: " + objectMapper.writeValueAsString(resultTicket));
+            return new ResponseEntity<>(resultTicket, HttpStatus.OK);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -105,12 +129,17 @@ public class TicketController implements BasicController<Ticket>{
     @DeleteMapping(value = "/{pathId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Ticket> delete(@PathVariable Integer pathId){
-        Ticket resultTicket = ticketService.delete(pathId);
-        if(resultTicket != null){
-            return new ResponseEntity<>(resultTicket, HttpStatus.OK);
-        }
-        else {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        try {
+            Ticket resultTicket = ticketService.delete(pathId);
+            log.info("Result: " + objectMapper.writeValueAsString(resultTicket));
+            if(resultTicket != null){
+                return new ResponseEntity<>(resultTicket, HttpStatus.OK);
+            }
+            else {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
 
     }

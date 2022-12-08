@@ -17,15 +17,16 @@ import static com.vancefm.ticketstack.models.tables.Contact.CONTACT;
 @Service
 public class ContactService implements BasicService<Contact>{
 
-    private DSLContext context;
-
-    public ContactService(DSLContext context) {
-        this.context = context;
-    }
+    private final DSLContext context;
 
     private final ModelMapper modelMapper = new ModelMapper();
 
-    ContactService() { modelMapper.getConfiguration().setSourceNameTokenizer(NameTokenizers.UNDERSCORE);}
+    ContactService(DSLContext context) {
+        this.context = context;
+        modelMapper.getConfiguration().setSourceNameTokenizer(NameTokenizers.UNDERSCORE);
+    }
+
+    //ContactService() {}
 
     @Override
     public List<Contact> getAll() {
