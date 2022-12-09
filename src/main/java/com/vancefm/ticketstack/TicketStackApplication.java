@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class TicketStackApplication {
 
 	public static void main(String[] args) {
-		System.setProperty("org.jooq.no-logo", "true");
+		//System.setProperty("org.jooq.no-logo", "true");
 		SpringApplication.run(TicketStackApplication.class, args);
 	}
 

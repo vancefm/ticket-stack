@@ -11,6 +11,7 @@ This app uses docker compose.
 
 ### Quick Commands ### 
 1. Build image, container and run: `docker compose up`
+2. Clear docker caches: `docker system prune -a`
 3. Rebuild image, container and run: `docker-compose up --force-recreate --build -d` and then `docker image prune -f` to cleanup
 
 # Documentation

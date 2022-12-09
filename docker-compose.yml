@@ -1,9 +1,14 @@
 version: "3.8"
 services:
   api:
+    image: ticket-stack-api:latest
     build: .
     ports:
       - "8080:8080"
-    logging:
-      driver: json-file
-    command: --log-opt mode=console
+    #logging:
+    #  driver: json-file
+    #command: --log-opt mode=stdout
+    #command: java -Dlogback.configurationFile=/app/logback/logback-spring.xml -jar myapp.jar
+    #command: java -Dlogging.config=/app/logback-spring.xml -jar myapp.jar
+    #volumes:
+    #  - ./logback-spring.xml:/app/logback-spring.xml
