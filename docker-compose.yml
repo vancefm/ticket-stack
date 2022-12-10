@@ -5,10 +5,3 @@ services:
     build: .
     ports:
       - "8080:8080"
-    #logging:
-    #  driver: json-file
-    #command: --log-opt mode=stdout
-    #command: java -Dlogback.configurationFile=/app/logback/logback-spring.xml -jar myapp.jar
-    #command: java -Dlogging.config=/app/logback-spring.xml -jar myapp.jar
-    #volumes:
-    #  - ./logback-spring.xml:/app/logback-spring.xml
