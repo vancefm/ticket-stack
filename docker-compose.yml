@@ -1,9 +1,7 @@
 version: "3.8"
 services:
   api:
+    image: ticket-stack-api:latest
     build: .
     ports:
       - "8080:8080"
-    logging:
-      driver: json-file
-    command: --log-opt mode=console

@@ -1,6 +1,11 @@
 FROM openjdk:17-alpine
-ARG JAR_FILE=target/*.jar
-COPY src/main/resources/logback.xml /etc/logback/
-ENV CLASSPATH /etc/logback/logback.xml
-COPY ${JAR_FILE} app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
+
+EXPOSE 8080
+
+COPY target/ticket-stack-0.0.1-SNAPSHOT.jar /app/app.jar
+COPY src/main/resources/logback-spring.xml /app/
+
+WORKDIR /app
+
+ENTRYPOINT ["java","-cp","app/app.jar:/app","-Dlogging.config=/app/logback-spring.xml","-jar","/app/app.jar"]
+RUN ls -la /app

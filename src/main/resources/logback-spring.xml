@@ -9,17 +9,10 @@
         </encoder>
     </appender>
 
-    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>
-                %d{dd-MM-yyyy HH:mm:ss.SSS} %red([%thread]) %highlight(%-5level) %logger{36}.%M - %msg%n
-            </pattern>
-        </encoder>
-    </appender>
-
-    <root level="info">
+    <root level="INFO">
         <appender-ref ref="STDOUT"/>
-        <!-- appender-ref ref="CONSOLE" /-->
     </root>
+
+    <!--    <logger name="org.springframework" level="DEBUG" />-->
 
 </configuration>
