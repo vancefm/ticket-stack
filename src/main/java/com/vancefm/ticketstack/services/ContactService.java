@@ -72,7 +72,7 @@ public class ContactService implements BasicService<Contact>{
             modelMapper.map(contact, contactRecord);
             contactRecord.store();
         }
-        return null;
+        return contact;
     }
 
     @Override
