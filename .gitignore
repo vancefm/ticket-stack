@@ -17,3 +17,4 @@
 .vscode/
 
 /ticket-stack-api/target/
+/ticket-stack-ui/node_modules/
